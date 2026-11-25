@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block titulo %}Frutos de Goiás{% endblock %} · Frutos de Goiás</title>
+  {# Título padrão: "Frutos de Goiás"; páginas internas acrescentam o nome antes. #}
+  <title>{% block titulo_completo %}{% block titulo %}{% endblock %} · Frutos de Goiás{% endblock %}</title>
+  <meta name="theme-color" content="#007A2F">
   <link rel="stylesheet" href="{{ estatico('css/estilo.css') }}">
-  <link rel="icon" href="{{ estatico('img/icone.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ estatico('img/logo.png') }}" type="image/png">
+  <link rel="apple-touch-icon" href="{{ estatico('img/logo.png') }}">
   <script src="{{ estatico('js/app.js') }}" defer></script>
 </head>
 <body class="{% block classe_body %}{% endblock %}">
   <header class="topo">
     <div class="topo__conteudo">
-      <a class="marca" href="{{ url_for('publico.catalogo') }}">
-        <img src="{{ estatico('img/icone.svg') }}" alt="" width="36" height="36">
-        <span>Frutos de Goiás</span>
+      <a class="marca" href="{{ url_for('publico.catalogo') if not request.path.startswith('/admin') else url_for('admin.pedidos') }}">
+        <img src="{{ estatico('img/logo.png') }}" alt="Frutos de Goiás" width="422" height="240">
       </a>
       <nav class="menu" aria-label="Menu principal">
         {% if session.get('usuario_id') and request.path.startswith('/admin') %}

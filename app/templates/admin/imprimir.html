@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Impressão de pedidos · Frutos de Goiás</title>
+  <link rel="icon" href="{{ estatico('img/logo.png') }}" type="image/png">
   <link rel="stylesheet" href="{{ estatico('css/impressao.css') }}">
   <script src="{{ estatico('js/app.js') }}" defer></script>
 </head>
@@ -26,7 +27,7 @@
   <article class="folha">
     <header class="folha__topo">
       <div>
-        <p class="folha__empresa">Frutos de Goiás</p>
+        <img class="folha__logo" src="{{ estatico('img/logo.png') }}" alt="Frutos de Goiás" width="422" height="240">
         <h1>Pedido nº {{ pedido.id }}</h1>
       </div>
       <div class="folha__status">{{ pedido.status }}</div>

@@ -42,7 +42,7 @@ frutos-de-goias/
 │   ├── rotas_publicas.py   # catálogo, pedido, consulta
 │   ├── rotas_admin.py      # login, pedidos, status, impressão, sabores
 │   ├── templates/          # páginas HTML (Jinja2)
-│   └── static/             # CSS, JS e ícone
+│   └── static/             # CSS, JS e logo
 ├── tests/                  # testes automatizados (pytest)
 ├── docs/arquitetura.md     # documentação técnica
 ├── gerar_certificado.py    # gera o certificado TLS autoassinado
