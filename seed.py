@@ -19,7 +19,7 @@ SABORES = {
         "Olho de Sogra", "Pequi", "Romeu e Julieta", "Tamarindo", "Taperebá", "Tapioca",
         "Umbu", "Uva",
     ],
-    "Especiais": [
+    "Premium": [
         "Açaí com Cupuaçu", "Açaí com Ninho", "Açaí com Tapioca", "Alfajor",
         "Avelã com Chocolate", "Bacuri", "Baru", "Brigadeiro", "Chocolate Branco",
         "Chocomenta", "Coco Verde", "Doce de Leite", "Frutas do Bosque", "Maltine", "Ninho",
@@ -27,7 +27,7 @@ SABORES = {
         "Passas ao Rum", "Pé de Moleque", "Skimó", "Tentação", "Torta de Limão",
         "Torta de Maracujá",
     ],
-    "Premium": [
+    "Especiais": [
         "Chocolate Belga", "Cookies Cream", "Morango em Pedaços", "Pistache",
         "Pistache Zero", "Ninho com Pistache",
     ],

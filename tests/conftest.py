@@ -37,7 +37,7 @@ def app(tmp_path):
         con = get_db()
         con.executemany(
             "INSERT INTO sabores (nome, categoria, disponivel) VALUES (?, ?, ?)",
-            [("Pequi", "Tradicionais", 1), ("Açaí", "Tradicionais", 1), ("Pistache", "Premium", 0)],
+            [("Pequi", "Tradicionais", 1), ("Açaí", "Tradicionais", 1), ("Pistache", "Especiais", 0)],
         )
         con.execute(
             "INSERT INTO usuarios (usuario, senha_hash, criado_em) VALUES (?, ?, ?)",

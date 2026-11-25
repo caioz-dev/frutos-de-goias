@@ -88,3 +88,7 @@ def test_seed_insere_sabores_sem_duplicar(app):
     esperado = sum(len(v) for v in seed.SABORES.values())
     assert segunda == 0
     assert total >= esperado and primeira > 0
+    assert len(seed.SABORES["Premium"]) == 25 and "Alfajor" in seed.SABORES["Premium"]
+    assert len(seed.SABORES["Especiais"]) == 6 and "Chocolate Belga" in seed.SABORES["Especiais"]
+    # Ordem das categorias na página: Tradicionais, Premium, Especiais, Kids...
+    assert list(seed.SABORES)[:3] == ["Tradicionais", "Premium", "Especiais"]

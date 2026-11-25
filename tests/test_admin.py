@@ -196,7 +196,7 @@ def test_alternar_disponibilidade_afeta_o_pedido(client, app):
 def test_adicionar_e_editar_sabor(client, app):
     login(client)
     token = token_csrf(client, "/admin/sabores")
-    client.post("/admin/sabores", data={"nome": "Baru com Doce de Leite", "categoria": "Especiais", "csrf_token": token})
+    client.post("/admin/sabores", data={"nome": "Baru com Doce de Leite", "categoria": "Premium", "csrf_token": token})
     assert "Baru com Doce de Leite" in client.get("/").get_data(as_text=True)
 
     # nome repetido é recusado
@@ -204,10 +204,10 @@ def test_adicionar_e_editar_sabor(client, app):
     assert resp.status_code == 400
 
     novo = id_sabor(app, "Baru com Doce de Leite")
-    client.post(f"/admin/sabores/{novo}/editar", data={"nome": "Baru Cremoso", "categoria": "Premium", "csrf_token": token})
+    client.post(f"/admin/sabores/{novo}/editar", data={"nome": "Baru Cremoso", "categoria": "Especiais", "csrf_token": token})
     with app.app_context():
         row = get_db().execute("SELECT nome, categoria FROM sabores WHERE id = ?", (novo,)).fetchone()
-    assert (row["nome"], row["categoria"]) == ("Baru Cremoso", "Premium")
+    assert (row["nome"], row["categoria"]) == ("Baru Cremoso", "Especiais")
 
 
 def test_editar_sabor_nao_altera_pedidos_antigos(client, app):
