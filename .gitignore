@@ -1,0 +1,18 @@
+# Segredos e configurações locais
+.env
+
+# Certificados TLS gerados localmente (contêm a chave privada)
+certs/
+
+# Banco de dados SQLite
+*.db
+instance/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Ambiente virtual
+venv/
+.venv/
