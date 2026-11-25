@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}Pedido nº {{ pedido.id }}{% endblock %}
+{% block conteudo %}
+<p><a href="{{ url_for('admin.pedidos') }}">← Voltar aos pedidos</a></p>
+
+<div class="cabecalho-pagina">
+  <h1>Pedido nº {{ pedido.id }}</h1>
+  <a class="botao" href="{{ url_for('admin.imprimir_pedido', pedido_id=pedido.id) }}" target="_blank" rel="noopener">Imprimir pedido</a>
+</div>
+
+<section class="cartao">
+  <p class="status-grande status--{{ pedido.status|classe_status }}">{{ pedido.status }}</p>
+  {% if acoes %}
+  <div class="acoes-status">
+    {% for a in acoes %}
+    <form method="post" action="{{ url_for('admin.mudar_status', pedido_id=pedido.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="status" value="{{ a.status }}">
+      <button type="submit" class="botao {{ a.estilo }}">{{ a.rotulo }}</button>
+    </form>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+<section class="cartao">
+  <h2>Cliente</h2>
+  <dl class="dados">
+    <dt>Responsável</dt><dd>{{ pedido.nome_responsavel }}</dd>
+    <dt>Instituição</dt><dd>{{ pedido.instituicao }}</dd>
+    <dt>Telefone</dt><dd>{{ pedido.telefone|telefone_br }}</dd>
+    <dt>Feito em</dt><dd>{{ pedido.criado_em|data_br }}</dd>
+    <dt>Data desejada</dt><dd>{{ pedido.data_desejada|data_br or '—' }}</dd>
+    <dt>Atualizado em</dt><dd>{{ pedido.atualizado_em|data_br }}</dd>
+  </dl>
+</section>
+
+<section class="cartao">
+  <h2>Itens</h2>
+  {% include "_tabela_itens.html" %}
+  <p><strong>Observações:</strong> {{ pedido.observacoes or '—' }}</p>
+</section>
+{% endblock %}

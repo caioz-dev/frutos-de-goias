@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block titulo %}Entrar{% endblock %}
+{% block conteudo %}
+<form method="post" action="{{ url_for('admin.login') }}" class="cartao form-estreito">
+  <h1>Área do dono</h1>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% if proximo %}<input type="hidden" name="next" value="{{ proximo }}">{% endif %}
+  <div class="campo">
+    <label for="usuario">Usuário</label>
+    <input id="usuario" name="usuario" required maxlength="40" autocomplete="username" autocapitalize="none">
+  </div>
+  <div class="campo">
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" required maxlength="200" autocomplete="current-password">
+  </div>
+  <button type="submit" class="botao botao--grande">Entrar</button>
+</form>
+{% endblock %}

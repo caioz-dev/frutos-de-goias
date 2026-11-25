@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Gerenciar sabores{% endblock %}
+{% block conteudo %}
+<h1>Gerenciar sabores</h1>
+
+<form method="post" action="{{ url_for('admin.novo_sabor') }}" class="cartao form-linha">
+  <h2>Adicionar sabor</h2>
+  {% include "_erros_form.html" %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="campo">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" required maxlength="60" value="{{ form.get('nome', '') }}">
+  </div>
+  <div class="campo">
+    <label for="categoria">Categoria</label>
+    <input id="categoria" name="categoria" required maxlength="40" list="categorias" value="{{ form.get('categoria', '') }}">
+  </div>
+  {% include "admin/_categorias.html" %}
+  <button type="submit" class="botao">Adicionar</button>
+</form>
+
+<label for="filtro-admin" class="sr-only">Filtrar sabores</label>
+<input id="filtro-admin" type="search" class="filtro" placeholder="Filtrar sabores…" autocomplete="off" data-filtro="#sabores-admin">
+
+<div id="sabores-admin">
+  {% for categoria, sabores in grupos %}
+  <section class="categoria" data-categoria>
+    <h2>{{ categoria }}</h2>
+    <ul class="lista-admin">
+      {% for s in sabores %}
+      <li id="sabor-{{ s.id }}" class="item-admin{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+        <span class="item-admin__nome">{{ s.nome }}</span>
+        <span class="item-admin__acoes">
+          <form method="post" action="{{ url_for('admin.alternar_disponibilidade', sabor_id=s.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="botao botao--pequeno {% if s.disponivel %}botao--ok{% else %}botao--desligado{% endif %}"
+                    aria-label="{{ s.nome }}: {{ 'disponível' if s.disponivel else 'indisponível' }}. Clique para alternar.">
+              {{ 'Disponível' if s.disponivel else 'Indisponível' }}
+            </button>
+          </form>
+          <a class="botao botao--pequeno botao--secundario" href="{{ url_for('admin.editar_sabor', sabor_id=s.id) }}">Editar</a>
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+  <p class="vazio" data-sem-resultado hidden>Nenhum sabor encontrado.</p>
+</div>
+{% endblock %}

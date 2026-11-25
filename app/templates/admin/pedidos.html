@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block titulo %}Pedidos{% endblock %}
+{% block conteudo %}
+<div class="cabecalho-pagina">
+  <h1>Pedidos</h1>
+  <a class="botao" href="{{ url_for('admin.imprimir_filtrados', **filtros_ativos) }}" target="_blank" rel="noopener">
+    Imprimir {{ pedidos|length }} pedido(s) da lista
+  </a>
+</div>
+
+<nav class="atalhos" aria-label="Atalhos de status">
+  <a href="{{ url_for('admin.pedidos') }}" class="{% if not filtros.status %}ativo{% endif %}">Todos</a>
+  {% for st in status_lista %}
+  <a href="{{ url_for('admin.pedidos', status=st) }}" class="{% if filtros.status == st %}ativo{% endif %}">
+    {{ st }} <span>{{ contagem.get(st, 0) }}</span>
+  </a>
+  {% endfor %}
+  <a href="{{ url_for('admin.pedidos', status='Novo', data_pedido=hoje) }}">Novos de hoje</a>
+</nav>
+
+<form method="get" action="{{ url_for('admin.pedidos') }}" class="cartao filtros">
+  <div class="campo">
+    <label for="f-status">Status</label>
+    <select id="f-status" name="status">
+      <option value="">Todos</option>
+      {% for st in status_lista %}
+      <option value="{{ st }}" {% if filtros.status == st %}selected{% endif %}>{{ st }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="campo">
+    <label for="f-data-pedido">Data do pedido</label>
+    <input id="f-data-pedido" type="date" name="data_pedido" value="{{ filtros.data_pedido }}">
+  </div>
+  <div class="campo">
+    <label for="f-data-retirada">Data de retirada</label>
+    <input id="f-data-retirada" type="date" name="data_retirada" value="{{ filtros.data_retirada }}">
+  </div>
+  <div class="campo">
+    <label for="f-inst">Instituição</label>
+    <input id="f-inst" type="search" name="instituicao" value="{{ filtros.instituicao }}" maxlength="120">
+  </div>
+  <div class="filtros__acoes">
+    <button type="submit" class="botao">Filtrar</button>
+    <a href="{{ url_for('admin.pedidos') }}" class="botao botao--secundario">Limpar</a>
+  </div>
+</form>
+
+{% if pedidos %}
+<ul class="lista-pedidos">
+  {% for p in pedidos %}
+  <li class="cartao pedido-resumo">
+    <a href="{{ url_for('admin.pedido_detalhe', pedido_id=p.id) }}" class="pedido-resumo__link">
+      <span class="pedido-resumo__numero">nº {{ p.id }}</span>
+      <span class="status status--{{ p.status|classe_status }}">{{ p.status }}</span>
+      <strong class="pedido-resumo__inst">{{ p.instituicao }}</strong>
+      <span>{{ p.nome_responsavel }} · {{ p.telefone|telefone_br }}</span>
+      <span class="pedido-resumo__meta">
+        Feito em {{ p.criado_em|data_br }}
+        {% if p.data_desejada %} · Retirada {{ p.data_desejada|data_br }}{% endif %}
+        · {{ p.total_itens }} itens
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="vazio">Nenhum pedido encontrado com esses filtros.</p>
+{% endif %}
+{% endblock %}

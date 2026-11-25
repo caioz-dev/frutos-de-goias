@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Editar sabor{% endblock %}
+{% block conteudo %}
+<p><a href="{{ url_for('admin.sabores') }}#sabor-{{ sabor.id }}">← Voltar aos sabores</a></p>
+<form method="post" action="{{ url_for('admin.editar_sabor', sabor_id=sabor.id) }}" class="cartao form-estreito">
+  <h1>Editar sabor</h1>
+  {% include "_erros_form.html" %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="campo">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" required maxlength="60" value="{{ form.get('nome', '') }}">
+  </div>
+  <div class="campo">
+    <label for="categoria">Categoria</label>
+    <input id="categoria" name="categoria" required maxlength="40" list="categorias" value="{{ form.get('categoria', '') }}">
+    <small>Escolha uma existente ou digite uma nova.</small>
+  </div>
+  {% include "admin/_categorias.html" %}
+  <p>Situação: <strong>{{ 'Disponível' if sabor.disponivel else 'Indisponível' }}</strong> (altere na lista de sabores).</p>
+  <button type="submit" class="botao botao--grande">Salvar</button>
+</form>
+{% endblock %}

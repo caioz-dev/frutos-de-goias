@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impressão de pedidos · Frutos de Goiás</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/impressao.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <div class="barra-tela">
+    <button type="button" data-imprimir>Imprimir</button>
+    <span>
+      {{ lista|length }} pedido(s)
+      {% if filtros %}
+        {% if filtros.status %}· Status: {{ filtros.status }}{% endif %}
+        {% if filtros.data_pedido %}· Pedidos de {{ filtros.data_pedido|data_br }}{% endif %}
+        {% if filtros.data_retirada %}· Retirada em {{ filtros.data_retirada|data_br }}{% endif %}
+        {% if filtros.instituicao %}· Instituição: "{{ filtros.instituicao }}"{% endif %}
+      {% endif %}
+    </span>
+  </div>
+
+  {% for pedido, itens in lista %}
+  {% set total = itens|sum(attribute='quantidade') %}
+  <article class="folha">
+    <header class="folha__topo">
+      <div>
+        <p class="folha__empresa">Frutos de Goiás</p>
+        <h1>Pedido nº {{ pedido.id }}</h1>
+      </div>
+      <div class="folha__status">{{ pedido.status }}</div>
+    </header>
+
+    <table class="folha__dados">
+      <tr><th>Data do pedido</th><td>{{ pedido.criado_em|data_br }}</td>
+          <th>Retirada/entrega</th><td>{{ pedido.data_desejada|data_br or '—' }}</td></tr>
+      <tr><th>Cliente</th><td colspan="3">{{ pedido.nome_responsavel }}</td></tr>
+      <tr><th>Instituição</th><td colspan="3">{{ pedido.instituicao }}</td></tr>
+      <tr><th>Telefone</th><td colspan="3">{{ pedido.telefone|telefone_br }}</td></tr>
+    </table>
+
+    <table class="folha__itens">
+      <thead><tr><th class="check">✓</th><th>Sabor</th><th class="num">Quantidade</th></tr></thead>
+      <tbody>
+        {% for i in itens %}
+        <tr><td class="check">☐</td><td>{{ i.nome_sabor }}</td><td class="num">{{ i.quantidade }}</td></tr>
+        {% endfor %}
+      </tbody>
+      <tfoot><tr><td></td><th>Total de itens</th><td class="num">{{ total }}</td></tr></tfoot>
+    </table>
+
+    <p class="folha__obs"><strong>Observações:</strong> {{ pedido.observacoes or '—' }}</p>
+
+    <p class="folha__assinatura">Separado por: ______________________________ &nbsp; Data: ____/____/______</p>
+  </article>
+  {% else %}
+  <p class="vazio">Nenhum pedido para imprimir com esses filtros.</p>
+  {% endfor %}
+</body>
+</html>
