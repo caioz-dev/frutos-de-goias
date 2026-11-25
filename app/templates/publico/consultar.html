@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Consultar meu pedido{% endblock %}
+{% block conteudo %}
+<h1>Consultar meu pedido</h1>
+<p class="ajuda">Informe o número do pedido e o telefone usado ao fazer o pedido.</p>
+
+<form method="post" action="{{ url_for('publico.consultar') }}" class="cartao form-estreito">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div class="campo">
+    <label for="numero">Número do pedido</label>
+    <input id="numero" name="numero" inputmode="numeric" required maxlength="10" value="{{ numero }}" autocomplete="off">
+  </div>
+  <div class="campo">
+    <label for="telefone">Telefone/WhatsApp</label>
+    <input id="telefone" name="telefone" type="tel" inputmode="tel" required maxlength="20" placeholder="(62) 99999-8888">
+  </div>
+  <button type="submit" class="botao botao--grande">Consultar</button>
+</form>
+
+{% if erro %}<p class="alerta alerta--erro" role="alert">{{ erro }}</p>{% endif %}
+
+{% if pedido %}
+<section class="cartao">
+  <h2>Pedido nº {{ pedido.id }}</h2>
+  <p class="status-grande status--{{ pedido.status|classe_status }}">{{ pedido.status }}</p>
+  <ol class="linha-status" aria-label="Andamento do pedido">
+    {% set etapas = ['Novo', 'Em separação', 'Pronto', 'Entregue'] %}
+    {% set atual = etapas.index(pedido.status) if pedido.status in etapas else -1 %}
+    {% for e in etapas %}
+      <li class="{% if loop.index0 <= atual %}feito{% endif %}">{{ e }}</li>
+    {% endfor %}
+  </ol>
+  <dl class="dados">
+    <dt>Feito em</dt><dd>{{ pedido.criado_em|data_br }}</dd>
+    {% if pedido.data_desejada %}<dt>Data desejada</dt><dd>{{ pedido.data_desejada|data_br }}</dd>{% endif %}
+    <dt>Última atualização</dt><dd>{{ pedido.atualizado_em|data_br }}</dd>
+  </dl>
+  {% include "_tabela_itens.html" %}
+</section>
+{% endif %}
+{% endblock %}

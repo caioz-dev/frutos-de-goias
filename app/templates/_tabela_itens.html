@@ -1,0 +1,9 @@
+<table class="tabela-itens">
+  <thead><tr><th scope="col">Sabor</th><th scope="col" class="num">Qtd.</th></tr></thead>
+  <tbody>
+    {% for i in itens %}
+    <tr><td>{{ i.nome_sabor }}</td><td class="num">{{ i.quantidade }}</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot><tr><th scope="row">Total de itens</th><td class="num"><strong>{{ total }}</strong></td></tr></tfoot>
+</table>

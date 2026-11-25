@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Frutos de Goiás{% endblock %} · Frutos de Goiás</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='img/icone.svg') }}" type="image/svg+xml">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body class="{% block classe_body %}{% endblock %}">
+  <header class="topo">
+    <div class="topo__conteudo">
+      <a class="marca" href="{{ url_for('publico.catalogo') }}">
+        <img src="{{ url_for('static', filename='img/icone.svg') }}" alt="" width="36" height="36">
+        <span>Frutos de Goiás</span>
+      </a>
+      <nav class="menu" aria-label="Menu principal">
+        {% if session.get('usuario_id') and request.path.startswith('/admin') %}
+          <a href="{{ url_for('admin.pedidos') }}" {% if request.endpoint == 'admin.pedidos' %}aria-current="page"{% endif %}>Pedidos</a>
+          <a href="{{ url_for('admin.sabores') }}" {% if request.endpoint == 'admin.sabores' %}aria-current="page"{% endif %}>Sabores</a>
+          <form method="post" action="{{ url_for('admin.logout') }}" class="menu__sair">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Sair</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('publico.catalogo') }}" {% if request.endpoint == 'publico.catalogo' %}aria-current="page"{% endif %}>Sabores</a>
+          <a href="{{ url_for('publico.fazer_pedido') }}" {% if request.endpoint == 'publico.fazer_pedido' %}aria-current="page"{% endif %}>Fazer pedido</a>
+          <a href="{{ url_for('publico.consultar') }}" {% if request.endpoint == 'publico.consultar' %}aria-current="page"{% endif %}>Meu pedido</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% for categoria, msg in mensagens %}
+        <p class="alerta alerta--{{ categoria }}" role="status">{{ msg }}</p>
+      {% endfor %}
+    {% endwith %}
+    {% block conteudo %}{% endblock %}
+  </main>
+
+  <footer class="rodape">
+    <p>Frutos de Goiás · Galvão e França Comércio de Alimentos LTDA</p>
+    {% if not request.path.startswith('/admin') %}
+      <p><a href="{{ url_for('admin.login') }}">Área do dono</a></p>
+    {% endif %}
+  </footer>
+</body>
+</html>

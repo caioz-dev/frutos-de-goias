@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block titulo %}Pedido recebido{% endblock %}
+{% block conteudo %}
+<section class="cartao cartao--sucesso">
+  <h1>Pedido recebido!</h1>
+  <p class="numero-pedido">Pedido nº <strong>{{ pedido.id }}</strong></p>
+  <p>Anote o número. Para acompanhar, use a página <a href="{{ url_for('publico.consultar') }}">Meu pedido</a> com este número e o telefone informado.</p>
+</section>
+
+<section class="cartao">
+  <h2>Resumo</h2>
+  <dl class="dados">
+    <dt>Responsável</dt><dd>{{ pedido.nome_responsavel }}</dd>
+    <dt>Instituição</dt><dd>{{ pedido.instituicao }}</dd>
+    <dt>Telefone</dt><dd>{{ pedido.telefone|telefone_br }}</dd>
+    <dt>Feito em</dt><dd>{{ pedido.criado_em|data_br }}</dd>
+    {% if pedido.data_desejada %}<dt>Data desejada</dt><dd>{{ pedido.data_desejada|data_br }}</dd>{% endif %}
+    <dt>Status</dt><dd><span class="status status--{{ pedido.status|classe_status }}">{{ pedido.status }}</span></dd>
+  </dl>
+  {% include "_tabela_itens.html" %}
+  {% if pedido.observacoes %}<p><strong>Observações:</strong> {{ pedido.observacoes }}</p>{% endif %}
+</section>
+
+<p><a class="botao botao--secundario" href="{{ url_for('publico.catalogo') }}">Voltar aos sabores</a></p>
+{% endblock %}

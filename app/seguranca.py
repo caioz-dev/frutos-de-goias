@@ -168,13 +168,20 @@ def texto(valor: str | None) -> str:
 
 
 def normalizar_telefone(valor: str | None) -> str:
-    """Mantém só os dígitos: '(62) 99999-8888' -> '62999998888'."""
-    return re.sub(r"\D", "", valor or "")
+    """Mantém só os dígitos: '(62) 99999-8888' -> '62999998888'.
+
+    Também remove o código do país (+55) e o zero de longa distância, para
+    que '+55 62 99999-8888' e '062 99999-8888' virem o mesmo número.
+    """
+    digitos = re.sub(r"\D", "", valor or "").lstrip("0")
+    if len(digitos) in (12, 13) and digitos.startswith("55"):
+        digitos = digitos[2:]
+    return digitos
 
 
 def telefone_valido(digitos: str) -> bool:
-    # DDD + número (10 ou 11 dígitos); aceita também +55 na frente.
-    return 10 <= len(digitos) <= 13
+    # DDD + número: 10 dígitos (fixo) ou 11 (celular).
+    return len(digitos) in (10, 11)
 
 
 def validar_data_desejada(valor: str) -> tuple[str | None, str | None]:

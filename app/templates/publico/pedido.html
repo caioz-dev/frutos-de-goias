@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block titulo %}Fazer pedido{% endblock %}
+{% block conteudo %}
+<h1>Fazer pedido</h1>
+<p class="ajuda">Informe a quantidade (em unidades, de 1 a 99) dos sabores que deseja. Deixe em branco os que não quiser. Não há pagamento pelo site.</p>
+
+{% include "_erros_form.html" %}
+
+<form method="post" action="{{ url_for('publico.fazer_pedido') }}" class="form-pedido" data-form-pedido>
+  {# Token CSRF: prova que o formulário foi gerado por este servidor. #}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <fieldset class="cartao">
+    <legend>1. Sabores e quantidades</legend>
+    <label for="filtro-pedido" class="sr-only">Filtrar sabores</label>
+    <input id="filtro-pedido" type="search" class="filtro" placeholder="Filtrar sabores…" autocomplete="off"
+           data-filtro="#sabores-pedido">
+
+    <div id="sabores-pedido">
+      {% for categoria, sabores in grupos %}
+      <section class="categoria" data-categoria>
+        <h2>{{ categoria }}</h2>
+        <ul class="lista-qtd">
+          {% for s in sabores %}
+          {% set campo = 'qtd_' ~ s.id %}
+          <li class="item-qtd{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+            {% if s.disponivel %}
+              <label for="{{ campo }}">{{ s.nome }}</label>
+              <input id="{{ campo }}" name="{{ campo }}" type="number" inputmode="numeric"
+                     min="0" max="99" step="1" placeholder="0" value="{{ form.get(campo, '') }}" data-qtd>
+            {% else %}
+              <span>{{ s.nome }}</span>
+              <span class="etiqueta">Indisponível</span>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endfor %}
+      <p class="vazio" data-sem-resultado hidden>Nenhum sabor encontrado.</p>
+    </div>
+  </fieldset>
+
+  <fieldset class="cartao" id="dados">
+    <legend>2. Seus dados</legend>
+    <div class="campo">
+      <label for="nome_responsavel">Nome do responsável *</label>
+      <input id="nome_responsavel" name="nome_responsavel" required maxlength="100" autocomplete="name"
+             value="{{ form.get('nome_responsavel', '') }}">
+    </div>
+    <div class="campo">
+      <label for="instituicao">Instituição (empresa ou escola) *</label>
+      <input id="instituicao" name="instituicao" required maxlength="120" autocomplete="organization"
+             value="{{ form.get('instituicao', '') }}">
+    </div>
+    <div class="campo">
+      <label for="telefone">Telefone/WhatsApp *</label>
+      <input id="telefone" name="telefone" type="tel" required maxlength="20" autocomplete="tel"
+             inputmode="tel" placeholder="(62) 99999-8888" value="{{ form.get('telefone', '') }}">
+      <small>Guarde este número: ele será pedido para consultar o pedido.</small>
+    </div>
+    <div class="campo">
+      <label for="data_desejada">Data desejada para retirada/entrega</label>
+      <input id="data_desejada" name="data_desejada" type="date" value="{{ form.get('data_desejada', '') }}">
+    </div>
+    <div class="campo">
+      <label for="observacoes">Observações</label>
+      <textarea id="observacoes" name="observacoes" maxlength="300" rows="3"
+                data-contador="#contador-obs">{{ form.get('observacoes', '') }}</textarea>
+      <small id="contador-obs" aria-live="polite">Até 300 caracteres.</small>
+    </div>
+  </fieldset>
+
+  <div class="barra-envio">
+    <span><strong data-total>0</strong> unidade(s) escolhida(s)</span>
+    <button type="submit" class="botao botao--grande">Enviar pedido</button>
+  </div>
+</form>
+{% endblock %}

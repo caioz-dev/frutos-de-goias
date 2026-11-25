@@ -1,0 +1,59 @@
+/* Página de impressão de pedidos: preto e branco, limpa, um pedido por folha. */
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12pt;
+  color: #000;
+  background: #f2f2f2;
+}
+
+.barra-tela {
+  position: sticky; top: 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;
+  padding: .8rem 1rem; background: #4a2c22; color: #fff;
+}
+.barra-tela button {
+  font: inherit; font-weight: 700; font-size: 1.05rem; cursor: pointer;
+  padding: .7rem 1.6rem; min-height: 48px; border: 0; border-radius: 999px;
+  background: #d94a6a; color: #fff;
+}
+
+.folha {
+  background: #fff; max-width: 190mm; margin: 1rem auto; padding: 12mm;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .15);
+}
+.folha__topo {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  border-bottom: 2px solid #000; padding-bottom: 4mm; margin-bottom: 4mm;
+}
+.folha__empresa { margin: 0; font-size: 10pt; text-transform: uppercase; letter-spacing: .05em; }
+.folha h1 { margin: 0; font-size: 20pt; }
+.folha__status { border: 1.5px solid #000; padding: 1.5mm 4mm; font-weight: 700; }
+
+table { width: 100%; border-collapse: collapse; }
+.folha__dados { margin-bottom: 5mm; }
+.folha__dados th, .folha__dados td { text-align: left; padding: 1.5mm 2mm; border: 1px solid #999; vertical-align: top; }
+.folha__dados th { width: 28mm; background: #eee; font-size: 10pt; }
+
+.folha__itens th, .folha__itens td { padding: 2mm; border: 1px solid #000; text-align: left; }
+.folha__itens thead th { background: #ddd; }
+.folha__itens tfoot th, .folha__itens tfoot td { font-weight: 700; font-size: 13pt; }
+.folha__itens .num { text-align: right; width: 30mm; font-variant-numeric: tabular-nums; }
+.folha__itens .check { width: 9mm; text-align: center; }
+
+.folha__obs { margin: 5mm 0; min-height: 10mm; }
+.folha__assinatura { margin-top: 12mm; }
+
+.vazio { text-align: center; padding: 3rem; }
+
+/* Só o que interessa vai para o papel. */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body { background: #fff; }
+  .barra-tela { display: none; }
+  .folha { box-shadow: none; margin: 0; padding: 0; max-width: none; break-after: page; }
+  .folha:last-of-type { break-after: auto; }
+  .folha__itens tr { break-inside: avoid; }
+  .folha__dados th, .folha__itens thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

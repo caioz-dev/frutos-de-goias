@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block conteudo %}
+<section class="cartao cartao--centro">
+  <h1>{{ titulo }}</h1>
+  <p>{{ mensagem }}</p>
+  <p><a class="botao" href="{{ url_for('publico.catalogo') }}">Voltar ao início</a></p>
+</section>
+{% endblock %}

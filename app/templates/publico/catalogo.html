@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block titulo %}Sabores{% endblock %}
+{% block conteudo %}
+<section class="destaque">
+  <h1>Nossos sabores</h1>
+  <p>Sorvetes artesanais com frutas do cerrado e clássicos de sempre. Escolha os sabores e faça o pedido da sua empresa ou escola.</p>
+  <a class="botao botao--grande" href="{{ url_for('publico.fazer_pedido') }}">Fazer pedido</a>
+</section>
+
+<form class="busca" method="get" action="{{ url_for('publico.catalogo') }}" role="search">
+  <label for="busca" class="sr-only">Buscar sabor</label>
+  <input id="busca" type="search" name="q" value="{{ busca }}" placeholder="Buscar sabor, ex.: pequi"
+         maxlength="60" autocomplete="off" data-filtro="#lista-sabores">
+  <button type="submit" class="botao botao--secundario">Buscar</button>
+</form>
+
+<div id="lista-sabores">
+  {% for categoria, sabores in grupos %}
+  <section class="categoria" data-categoria>
+    <h2>{{ categoria }} <span class="categoria__qtd">{{ sabores|length }}</span></h2>
+    <ul class="grade-sabores">
+      {% for s in sabores %}
+      <li class="sabor{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+        <span class="sabor__nome">{{ s.nome }}</span>
+        {% if not s.disponivel %}<span class="etiqueta">Indisponível</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% else %}
+  <p class="vazio">Nenhum sabor encontrado{% if busca %} para "{{ busca }}"{% endif %}.</p>
+  {% endfor %}
+  <p class="vazio" data-sem-resultado hidden>Nenhum sabor encontrado.</p>
+</div>
+{% endblock %}
