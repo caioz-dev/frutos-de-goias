@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from . import STATUS
 from .db import agora, get_db
-from .rotas_publicas import agrupar_por_categoria
+from .rotas_publicas import agrupar_por_categoria, carregar_sabores
 from .seguranca import (
     LIMITES, destino_seguro, limitador_login, login_obrigatorio, texto,
 )
@@ -244,7 +244,7 @@ def categorias_existentes() -> list[str]:
 
 
 def tela_sabores(form, erros):
-    lista = get_db().execute("SELECT * FROM sabores ORDER BY nome COLLATE NOCASE").fetchall()
+    lista = carregar_sabores()
     return render_template(
         "admin/sabores.html", grupos=agrupar_por_categoria(lista),
         categorias=categorias_existentes(), form=form, erros=erros,

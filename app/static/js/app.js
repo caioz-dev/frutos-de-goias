@@ -21,8 +21,13 @@
       var algumVisivel = false;
       alvo.querySelectorAll("[data-categoria]").forEach(function (cat) {
         var visiveis = 0;
+        // A categoria inteira aparece se o termo for o começo de uma palavra
+        // dela (ex.: "kids", "premium"); senão, compara com o nome do sabor.
+        var categoriaBate = !!termo && normalizar(cat.dataset.categoria).split(/\s+/).some(function (p) {
+          return p.indexOf(termo) === 0;
+        });
         cat.querySelectorAll("[data-nome]").forEach(function (item) {
-          var mostra = !termo || normalizar(item.dataset.nome).indexOf(termo) !== -1;
+          var mostra = !termo || categoriaBate || normalizar(item.dataset.nome).indexOf(termo) !== -1;
           item.hidden = !mostra;
           if (mostra) visiveis++;
         });

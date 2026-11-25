@@ -24,11 +24,11 @@
 
 <div id="sabores-admin">
   {% for categoria, sabores in grupos %}
-  <section class="categoria" data-categoria>
+  <section class="categoria" data-categoria="{{ categoria }}">
     <h2>{{ categoria }}</h2>
     <ul class="lista-admin">
       {% for s in sabores %}
-      <li id="sabor-{{ s.id }}" class="item-admin{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+      <li id="sabor-{{ s.id }}" class="item-admin{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }}">
         <span class="item-admin__nome">{{ s.nome }}</span>
         <span class="item-admin__acoes">
           <form method="post" action="{{ url_for('admin.alternar_disponibilidade', sabor_id=s.id) }}">

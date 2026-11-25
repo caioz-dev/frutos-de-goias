@@ -10,7 +10,7 @@ from pathlib import Path
 
 import click
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from werkzeug.security import generate_password_hash
 
@@ -96,6 +96,14 @@ def registrar_erros(app: Flask) -> None:
 
 
 def registrar_filtros(app: Flask) -> None:
+    @app.template_global("estatico")
+    def estatico(arquivo: str) -> str:
+        """URL de arquivo estático com versão (?v=data de modificação), para o
+        navegador baixar de novo o CSS/JS quando ele mudar."""
+        caminho = Path(app.static_folder) / arquivo
+        versao = int(caminho.stat().st_mtime) if caminho.exists() else 0
+        return url_for("static", filename=arquivo, v=versao)
+
     @app.template_filter("data_br")
     def data_br(valor: str | None) -> str:
         """'2026-11-25' -> '25/11/2026'; '2026-11-25 14:30:00' -> '25/11/2026 14:30'."""

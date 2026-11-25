@@ -29,9 +29,14 @@ def sem_acento(s: str) -> str:
 
 
 def carregar_sabores():
-    return get_db().execute(
-        "SELECT id, nome, categoria, disponivel FROM sabores ORDER BY nome COLLATE NOCASE"
-    ).fetchall()
+    sabores = get_db().execute("SELECT id, nome, categoria, disponivel FROM sabores").fetchall()
+    # Ordena em Python ignorando acentos ("Açaí" fica junto de "Acerola").
+    return sorted(sabores, key=lambda s: sem_acento(s["nome"]))
+
+
+def categoria_bate(termo: str, categoria: str) -> bool:
+    """O termo é o começo de alguma palavra da categoria? ("kid" -> "Kids")."""
+    return any(p.startswith(termo) for p in sem_acento(categoria).split())
 
 
 def agrupar_por_categoria(sabores) -> list[tuple[str, list]]:
@@ -61,7 +66,7 @@ def catalogo():
     sabores = carregar_sabores()
     if busca:
         termo = sem_acento(busca)
-        sabores = [s for s in sabores if termo in sem_acento(s["nome"]) or termo in sem_acento(s["categoria"])]
+        sabores = [s for s in sabores if termo in sem_acento(s["nome"]) or categoria_bate(termo, s["categoria"])]
     return render_template("publico/catalogo.html", grupos=agrupar_por_categoria(sabores), busca=busca)
 
 

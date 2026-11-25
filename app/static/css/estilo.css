@@ -71,7 +71,7 @@ h2 { font-size: 1.2rem; }
 .menu__sair { margin: 0; }
 
 /* ---------- Conteúdo ---------- */
-.conteudo { flex: 1; width: 100%; max-width: 1000px; margin: 0 auto; padding: 1.2rem 1rem 6rem; }
+.conteudo { flex: 1; width: 100%; min-width: 0; max-width: 1000px; margin: 0 auto; padding: 1.2rem 1rem 6rem; }
 
 .rodape { text-align: center; font-size: .9rem; color: var(--chocolate-suave); padding: 1rem; }
 .rodape p { margin: .2rem 0; }
@@ -127,7 +127,7 @@ legend { font-weight: 800; font-size: 1.15rem; padding: 0 .3rem; }
 .campo label { font-weight: 600; }
 .campo small { color: var(--chocolate-suave); font-size: .875rem; }
 input, select, textarea {
-  font: inherit; color: inherit; width: 100%;
+  font: inherit; color: inherit; width: 100%; min-width: 0;
   padding: .7rem .8rem; min-height: 48px;
   border: 1.5px solid #d8c4ae; border-radius: 10px; background: var(--branco);
 }
@@ -167,9 +167,10 @@ textarea { resize: vertical; }
 .item-qtd input { width: 5.5rem; text-align: center; font-size: 1.1rem; flex: none; }
 .item-qtd input:not(:placeholder-shown) { border-color: var(--menta); background: var(--menta-clara); font-weight: 700; }
 
+.barra-envio .botao--grande { width: auto; flex: none; padding-left: 1.6rem; padding-right: 1.6rem; }
 .barra-envio {
   position: sticky; bottom: 0; z-index: 5;
-  display: flex; flex-direction: column; gap: .5rem; align-items: stretch; text-align: center;
+  display: flex; justify-content: space-between; align-items: center; gap: .75rem;
   background: var(--branco); border-top: 3px solid var(--morango);
   padding: .8rem 1rem; margin: 0 -1rem; box-shadow: 0 -4px 14px rgba(74, 44, 34, .12);
 }
@@ -225,7 +226,7 @@ textarea { resize: vertical; }
 .atalhos a.ativo { background: var(--chocolate); color: var(--branco); border-color: var(--chocolate); }
 .atalhos a.ativo span { background: rgba(255, 255, 255, .25); }
 
-.filtros { display: grid; grid-template-columns: 1fr; gap: 0 .8rem; }
+.filtros { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 .8rem; }
 .filtros__acoes { display: flex; gap: .5rem; align-items: flex-end; margin-bottom: .9rem; }
 .filtros__acoes .botao { flex: 1; }
 
@@ -263,8 +264,9 @@ textarea { resize: vertical; }
   h1 { font-size: 2rem; }
   .grade-sabores { grid-template-columns: repeat(3, 1fr); }
   .botao--grande { width: auto; min-width: 240px; }
-  .barra-envio { flex-direction: row; justify-content: space-between; align-items: center; border-radius: var(--raio) var(--raio) 0 0; margin: 0; }
-  .filtros { grid-template-columns: repeat(2, 1fr); }
+  .barra-envio .botao--grande { width: auto; flex: none; padding-left: 1.6rem; padding-right: 1.6rem; }
+.barra-envio { flex-direction: row; justify-content: space-between; align-items: center; border-radius: var(--raio) var(--raio) 0 0; margin: 0; }
+  .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .acoes-status { flex-direction: row; flex-wrap: wrap; }
   .acoes-status .botao { width: auto; }
   .form-linha { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0 .8rem; align-items: end; }
@@ -277,5 +279,5 @@ textarea { resize: vertical; }
 
 @media (min-width: 900px) {
   .grade-sabores { grid-template-columns: repeat(4, 1fr); }
-  .filtros { grid-template-columns: repeat(4, 1fr) auto; align-items: end; }
+  .filtros { grid-template-columns: repeat(4, minmax(0, 1fr)) auto; align-items: end; }
 }

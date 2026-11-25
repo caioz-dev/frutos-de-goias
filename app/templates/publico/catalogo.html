@@ -16,11 +16,11 @@
 
 <div id="lista-sabores">
   {% for categoria, sabores in grupos %}
-  <section class="categoria" data-categoria>
+  <section class="categoria" data-categoria="{{ categoria }}">
     <h2>{{ categoria }} <span class="categoria__qtd">{{ sabores|length }}</span></h2>
     <ul class="grade-sabores">
       {% for s in sabores %}
-      <li class="sabor{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+      <li class="sabor{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }}">
         <span class="sabor__nome">{{ s.nome }}</span>
         {% if not s.disponivel %}<span class="etiqueta">Indisponível</span>{% endif %}
       </li>

@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Frutos de Goiás{% endblock %} · Frutos de Goiás</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
-  <link rel="icon" href="{{ url_for('static', filename='img/icone.svg') }}" type="image/svg+xml">
-  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ estatico('css/estilo.css') }}">
+  <link rel="icon" href="{{ estatico('img/icone.svg') }}" type="image/svg+xml">
+  <script src="{{ estatico('js/app.js') }}" defer></script>
 </head>
 <body class="{% block classe_body %}{% endblock %}">
   <header class="topo">
     <div class="topo__conteudo">
       <a class="marca" href="{{ url_for('publico.catalogo') }}">
-        <img src="{{ url_for('static', filename='img/icone.svg') }}" alt="" width="36" height="36">
+        <img src="{{ estatico('img/icone.svg') }}" alt="" width="36" height="36">
         <span>Frutos de Goiás</span>
       </a>
       <nav class="menu" aria-label="Menu principal">

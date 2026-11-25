@@ -18,12 +18,12 @@
 
     <div id="sabores-pedido">
       {% for categoria, sabores in grupos %}
-      <section class="categoria" data-categoria>
+      <section class="categoria" data-categoria="{{ categoria }}">
         <h2>{{ categoria }}</h2>
         <ul class="lista-qtd">
           {% for s in sabores %}
           {% set campo = 'qtd_' ~ s.id %}
-          <li class="item-qtd{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }} {{ categoria }}">
+          <li class="item-qtd{% if not s.disponivel %} sabor--indisponivel{% endif %}" data-nome="{{ s.nome }}">
             {% if s.disponivel %}
               <label for="{{ campo }}">{{ s.nome }}</label>
               <input id="{{ campo }}" name="{{ campo }}" type="number" inputmode="numeric"
